@@ -1,0 +1,15 @@
+.idea/
+.vscode/
+.env
+.DS_Store
+
+terraform-provider-zesty
+bin/
+dist/
+
+*coverage*
+gl-code-quality-report.json
+
+.terraform/
+*.tfstate*
+*.lock.hcl
