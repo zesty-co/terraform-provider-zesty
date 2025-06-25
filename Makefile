@@ -53,7 +53,7 @@ clean:
 terraformrc:
 	@bin=$$(go env GOBIN); \
 	if [ -z "$$bin" ]; then bin="$$HOME/go/bin"; fi; \
-	printf 'provider_installation {\n\n  dev_overrides {\n      "registry.terraform.io/zesty/zesty" = "%s"\n  }\n\n  direct {}\n}\n' "$$bin" > $$HOME/.terraformrc
+	printf 'provider_installation {\n\n  dev_overrides {\n      "registry.terraform.io/zesty-co/zesty" = "%s"\n  }\n\n  direct {}\n}\n' "$$bin" > $$HOME/.terraformrc
 
 .PHONY: release
 release:

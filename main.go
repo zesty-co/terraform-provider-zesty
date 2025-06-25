@@ -22,7 +22,7 @@ func init() {
 
 func main() {
 	opts := providerserver.ServeOpts{
-		Address: "registry.terraform.io/hashicorp/zesty",
+		Address: "registry.terraform.io/zesty-co/zesty",
 		Debug:   debug,
 	}
 
