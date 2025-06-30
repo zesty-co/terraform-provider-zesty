@@ -2,6 +2,7 @@ package provider
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -67,10 +68,18 @@ func ToModel(account *models.Account) (*accountModel, diag.Diagnostics) {
 		RoleARN:       types.StringValue(roleARNString),
 		ExternalID:    types.StringValue(externalIDString),
 	}
+
+	var productNames []string
+	for name := range account.Products {
+		productNames = append(productNames, string(name))
+	}
+	sort.Strings(productNames)
+
 	model.Products = []productModel{}
-	for product, details := range account.Products {
+	for _, name := range productNames {
+		details := account.Products[models.Product(name)]
 		model.Products = append(model.Products, productModel{
-			Name:   types.StringValue(string(product)),
+			Name:   types.StringValue(name),
 			Active: types.BoolValue(details.Active),
 			Values: types.StringValue(string(valuesBytes)),
 		})

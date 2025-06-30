@@ -3,12 +3,14 @@ package provider
 import (
 	"context"
 	"fmt"
+	"sort"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/zesty-co/terraform-provider-zesty/internal/client"
+	"github.com/zesty-co/terraform-provider-zesty/internal/models"
 )
 
 type AccountsDataSource struct {
@@ -154,10 +156,17 @@ func (d *AccountsDataSource) Read(ctx context.Context, req datasource.ReadReques
 			ExternalID:    types.StringValue(externalIDString),
 		}
 
-		for productName, productDetails := range account.Products {
+		var productNames []string
+		for name := range account.Products {
+			productNames = append(productNames, string(name))
+		}
+		sort.Strings(productNames)
+
+		for _, name := range productNames {
+			details := account.Products[models.Product(name)]
 			accountState.Products = append(accountState.Products, productModel{
-				Name:   types.StringValue(string(productName)),
-				Active: types.BoolValue(productDetails.Active),
+				Name:   types.StringValue(name),
+				Active: types.BoolValue(details.Active),
 			})
 		}
 
