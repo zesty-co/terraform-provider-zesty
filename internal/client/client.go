@@ -11,7 +11,7 @@ import (
 	"github.com/zesty-co/terraform-provider-zesty/internal/models"
 )
 
-const DefaultHostURL string = "https://kompass-onboarding.zesty.co"
+const DefaultHostURL string = "https://api.cloudvisor.io/kompass-platform"
 
 type Client struct {
 	HostURL    string

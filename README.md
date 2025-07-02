@@ -17,7 +17,7 @@ terraform {
   required_providers {
     zesty = {
       source  = "zesty-co/zesty"
-      version = "0.1.1"
+      version = "0.1.3"
     }
   }
   required_version = ">= 0.13"
