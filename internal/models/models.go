@@ -16,6 +16,8 @@ const (
 	Kompass   Product = "Kompass"
 	CM        Product = "CM"
 	ZestyDisk Product = "ZestyDisk"
+
+	DefaultHostURL string = "https://api.cloudvisor.io/kompass-platform"
 )
 
 type ProductDetails struct {

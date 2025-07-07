@@ -11,8 +11,6 @@ import (
 	"github.com/zesty-co/terraform-provider-zesty/internal/models"
 )
 
-const DefaultHostURL string = "https://api.cloudvisor.io/kompass-platform"
-
 type Client struct {
 	HostURL    string
 	HTTPClient *http.Client
@@ -22,7 +20,7 @@ type Client struct {
 func NewClient(host *string, token string) (*Client, error) {
 	c := Client{
 		HTTPClient: &http.Client{Timeout: 60 * time.Second},
-		HostURL:    DefaultHostURL,
+		HostURL:    models.DefaultHostURL,
 	}
 
 	if host != nil {

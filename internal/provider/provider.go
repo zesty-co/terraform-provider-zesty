@@ -13,6 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/zesty-co/terraform-provider-zesty/internal/client"
+	"github.com/zesty-co/terraform-provider-zesty/internal/models"
 )
 
 type ZestyProvider struct {
@@ -95,11 +96,7 @@ func (p *ZestyProvider) Configure(ctx context.Context, req provider.ConfigureReq
 	}
 
 	if host == "" {
-		resp.Diagnostics.AddAttributeError(
-			path.Root("host"),
-			"Missing Zesty API Host",
-			"The provider cannot create the Zesty API client as there is a missing or empty value for the Zesty API host.",
-		)
+		host = models.DefaultHostURL
 	}
 
 	if token == "" {

@@ -28,7 +28,7 @@ func TestNewClient(t *testing.T) {
 			name:        "nil host uses default",
 			host:        nil,
 			token:       "testtoken",
-			expectedURL: client.DefaultHostURL,
+			expectedURL: models.DefaultHostURL,
 			expectError: false,
 		},
 		{
