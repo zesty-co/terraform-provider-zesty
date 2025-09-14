@@ -37,7 +37,7 @@ type accountsDataSourceModel struct {
 type accountModel struct {
 	ID            types.String   `tfsdk:"id"`
 	CloudProvider types.String   `tfsdk:"cloud_provider"`
-	AWSRegion     types.String   `tfsdk:"aws_region"`
+	Region        types.String   `tfsdk:"region"`
 	RoleARN       types.String   `tfsdk:"role_arn"`
 	ExternalID    types.String   `tfsdk:"external_id"`
 	Products      []productModel `tfsdk:"products"`
@@ -75,7 +75,7 @@ func (d *AccountsDataSource) Schema(_ context.Context, _ datasource.SchemaReques
 							Description: "External ID (UUID)",
 							Computed:    true,
 						},
-						"aws_region": schema.StringAttribute{
+						"region": schema.StringAttribute{
 							Optional: true,
 							Computed: false,
 						},

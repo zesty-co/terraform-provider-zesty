@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -75,10 +76,11 @@ func (r *AccountResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 						Description: "External ID (UUID)",
 						Required:    true,
 					},
-					"aws_region": schema.StringAttribute{
-						Description: "AWS Region of the cloud provider",
+					"region": schema.StringAttribute{
+						Description: "Region of the cloud provider",
 						Optional:    true,
-						Computed:    false,
+						Default:     stringdefault.StaticString("us-east-1"),
+						Computed:    true,
 					},
 					"products": schema.ListNestedAttribute{
 						Description: "List of products activated on the account",
@@ -135,7 +137,7 @@ func (r *AccountResource) Create(ctx context.Context, req resource.CreateRequest
 
 	payload := models.Payload{
 		AccountID:     plan.Account.ID.ValueString(),
-		AWSRegion:     plan.Account.AWSRegion.ValueStringPointer(),
+		Region:        plan.Account.Region.ValueStringPointer(),
 		CloudProvider: models.CloudProvider(plan.Account.CloudProvider.ValueString()),
 		RoleARN:       plan.Account.RoleARN.ValueString(),
 		ExternalID:    plan.Account.ExternalID.ValueString(),
@@ -218,6 +220,7 @@ func (r *AccountResource) Update(ctx context.Context, req resource.UpdateRequest
 
 	payload := models.Payload{
 		AccountID:     plan.Account.ID.ValueString(),
+		Region:        plan.Account.Region.ValueStringPointer(),
 		CloudProvider: models.CloudProvider(plan.Account.CloudProvider.ValueString()),
 		RoleARN:       plan.Account.RoleARN.ValueString(),
 		ExternalID:    plan.Account.ExternalID.ValueString(),
