@@ -13,3 +13,4 @@ gl-code-quality-report.json
 .terraform/
 *.tfstate*
 *.lock.hcl
+__debug*
