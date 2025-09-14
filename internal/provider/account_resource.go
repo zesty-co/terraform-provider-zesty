@@ -75,6 +75,11 @@ func (r *AccountResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 						Description: "External ID (UUID)",
 						Required:    true,
 					},
+					"aws_region": schema.StringAttribute{
+						Description: "AWS Region of the cloud provider",
+						Optional:    true,
+						Computed:    false,
+					},
 					"products": schema.ListNestedAttribute{
 						Description: "List of products activated on the account",
 						Required:    true,
@@ -130,6 +135,7 @@ func (r *AccountResource) Create(ctx context.Context, req resource.CreateRequest
 
 	payload := models.Payload{
 		AccountID:     plan.Account.ID.ValueString(),
+		AWSRegion:     plan.Account.AWSRegion.ValueStringPointer(),
 		CloudProvider: models.CloudProvider(plan.Account.CloudProvider.ValueString()),
 		RoleARN:       plan.Account.RoleARN.ValueString(),
 		ExternalID:    plan.Account.ExternalID.ValueString(),
