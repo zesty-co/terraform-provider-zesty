@@ -27,6 +27,10 @@ data "zesty_accounts" "all" {}
 <a id="nestedatt--accounts"></a>
 ### Nested Schema for `accounts`
 
+Optional:
+
+- `region` (String)
+
 Read-Only:
 
 - `cloud_provider` (String) Name of cloud provider (e.g. AWS, GCP, Azure)

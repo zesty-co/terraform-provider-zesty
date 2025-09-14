@@ -51,6 +51,10 @@ Required:
 - `products` (Attributes List) List of products activated on the account (see [below for nested schema](#nestedatt--account--products))
 - `role_arn` (String) Role ARN generated on the cloud provider
 
+Optional:
+
+- `region` (String) Region of the cloud provider
+
 <a id="nestedatt--account--products"></a>
 ### Nested Schema for `account.products`
 
