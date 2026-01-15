@@ -102,6 +102,39 @@ func (r *AccountResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 							},
 						},
 					},
+					"cur": schema.SingleNestedAttribute{
+						Description: "Cur export data for the account",
+						Optional:    true,
+						Attributes: map[string]schema.Attribute{
+							"s3_bucket": schema.StringAttribute{
+								Description: "S3 bucket name for the cur export",
+								Required:    true,
+							},
+							"cur_export_name": schema.StringAttribute{
+								Description: "The cur export file name",
+								Required:    true,
+							},
+							"cur_type": schema.StringAttribute{
+								Optional: true,
+								Computed: true,
+								Default:  stringdefault.StaticString("cur_v2"),
+							},
+						},
+					},
+					"athena": schema.SingleNestedAttribute{
+						Description: "Athena resources data for the account",
+						Optional:    true,
+						Attributes: map[string]schema.Attribute{
+							"athena_db": schema.StringAttribute{
+								Description: "The athena db associated with the cur report",
+								Required:    true,
+							},
+							"athena_s3_bucket": schema.StringAttribute{
+								Description: "The s3 bucket for athena's results",
+								Required:    true,
+							},
+						},
+					},
 				},
 			},
 		},
@@ -142,12 +175,29 @@ func (r *AccountResource) Create(ctx context.Context, req resource.CreateRequest
 		RoleARN:       plan.Account.RoleARN.ValueString(),
 		ExternalID:    plan.Account.ExternalID.ValueString(),
 		Products:      map[models.Product]models.ProductDetails{},
+
 	}
 	for _, product := range plan.Account.Products {
 		payload.Products[models.Product(product.Name.ValueString())] = models.ProductDetails{
 			Active: product.Active.ValueBool(),
 		}
 	}
+
+	if plan.Account.Cur != nil {
+		payload.Cur = &models.CurDetails{
+			S3Bucket: plan.Account.Cur.S3Bucket.ValueString(),
+			ExportName: plan.Account.Cur.ExportName.ValueString(),
+			Type: plan.Account.Cur.Type.ValueString(),
+		}
+	}
+
+	if plan.Account.Athena != nil {
+		payload.Athena = &models.AthenaDetails{
+			AthenaDB: plan.Account.Athena.AthenaDB.ValueString(),
+				AthenaS3Bucket: plan.Account.Athena.AthenaS3Bucket.ValueString(),
+		}
+	}
+
 	tflog.Info(ctx, "Sending create request", map[string]any{"payload": payload})
 	account, err := r.client.CreateAccount(payload)
 	if err != nil {

@@ -24,6 +24,17 @@ type ProductDetails struct {
 	Active bool `json:"active" dynamodbav:"active"`
 }
 
+type CurDetails struct {
+	S3Bucket string `json:"s3Bucket"`
+	ExportName string `json:"exportName"`
+	Type string `json:"type"`
+}
+
+type AthenaDetails struct {
+	AthenaDB string `json:"athenaDB"`
+	AthenaS3Bucket string `json:"athenaS3Bucket"`
+}
+
 type Payload struct {
 	AccountID     string                     `json:"accountID"`
 	CloudProvider CloudProvider              `json:"cloudProvider"`
@@ -31,6 +42,8 @@ type Payload struct {
 	RoleARN       string                     `json:"roleARN"`
 	ExternalID    string                     `json:"externalID"`
 	Products      map[Product]ProductDetails `json:"products"`
+	Cur           *CurDetails                `json:"cur,omitempty"`
+	Athena        *AthenaDetails             `json:"athena,omitempty"`
 }
 
 type Account struct {
@@ -40,6 +53,8 @@ type Account struct {
 	Region           *string
 	CloudProvider    CloudProvider
 	Products         map[Product]ProductDetails
+	Cur 			 *CurDetails
+	Athena			 *AthenaDetails
 
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
