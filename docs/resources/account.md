@@ -53,6 +53,8 @@ Required:
 
 Optional:
 
+- `athena` (Attributes) Athena resources data for the account (see [below for nested schema](#nestedatt--account--athena))
+- `cur` (Attributes) Cur export data for the account (see [below for nested schema](#nestedatt--account--cur))
 - `region` (String) Region of the cloud provider
 
 <a id="nestedatt--account--products"></a>
@@ -66,6 +68,28 @@ Required:
 Read-Only:
 
 - `values` (String) Key-value pairs of product-specific values
+
+
+<a id="nestedatt--account--athena"></a>
+### Nested Schema for `account.athena`
+
+Required:
+
+- `athena_db` (String) The athena db associated with the cur report
+- `athena_s3_bucket` (String) The s3 bucket for athena's results
+
+
+<a id="nestedatt--account--cur"></a>
+### Nested Schema for `account.cur`
+
+Required:
+
+- `cur_export_name` (String) The cur export file name
+- `s3_bucket` (String) S3 bucket name for the cur export
+
+Optional:
+
+- `cur_type` (String)
 
 ## Import
 

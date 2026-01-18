@@ -281,6 +281,21 @@ func (r *AccountResource) Update(ctx context.Context, req resource.UpdateRequest
 		}
 	}
 
+	if plan.Account.Cur != nil {
+		payload.Cur = &models.CurDetails{
+			S3Bucket:   plan.Account.Cur.S3Bucket.ValueString(),
+			ExportName: plan.Account.Cur.ExportName.ValueString(),
+			Type:       plan.Account.Cur.Type.ValueString(),
+		}
+	}
+
+	if plan.Account.Athena != nil {
+		payload.Athena = &models.AthenaDetails{
+			AthenaDB:       plan.Account.Athena.AthenaDB.ValueString(),
+			AthenaS3Bucket: plan.Account.Athena.AthenaS3Bucket.ValueString(),
+		}
+	}
+
 	tflog.Info(ctx, "Sending update request", map[string]any{"payload": payload})
 	updatedAccount, err := r.client.UpdateAccount(payload)
 	if err != nil {
