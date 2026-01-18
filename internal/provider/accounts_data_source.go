@@ -41,8 +41,8 @@ type accountModel struct {
 	RoleARN       types.String   `tfsdk:"role_arn"`
 	ExternalID    types.String   `tfsdk:"external_id"`
 	Products      []productModel `tfsdk:"products"`
-	Cur 		  *curModel `tfsdk:"cur"`
-	Athena *athenaModel `tfsdk:"athena"`
+	Cur           *curModel      `tfsdk:"cur"`
+	Athena        *athenaModel   `tfsdk:"athena"`
 }
 
 type productModel struct {
@@ -52,17 +52,15 @@ type productModel struct {
 }
 
 type curModel struct {
-	S3Bucket types.String `tfsdk:"s3_bucket"`
+	S3Bucket   types.String `tfsdk:"s3_bucket"`
 	ExportName types.String `tfsdk:"cur_export_name"`
-	Type types.String `tfsdk:"cur_type"`
-
+	Type       types.String `tfsdk:"cur_type"`
 }
 
 type athenaModel struct {
-	AthenaDB types.String `tfsdk:"athena_db"`
+	AthenaDB       types.String `tfsdk:"athena_db"`
 	AthenaS3Bucket types.String `tfsdk:"athena_s3_bucket"`
 }
-
 
 // Schema defines the schema for the data source.
 func (d *AccountsDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {

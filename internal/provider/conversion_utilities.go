@@ -85,16 +85,16 @@ func ToModel(account *models.Account) (*accountModel, diag.Diagnostics) {
 			Values: types.StringValue(string(valuesBytes)),
 		})
 	}
-	if account.Cur != nil{
+	if account.Cur != nil {
 		model.Cur = &curModel{
-			S3Bucket: types.StringValue(account.Cur.S3Bucket),
+			S3Bucket:   types.StringValue(account.Cur.S3Bucket),
 			ExportName: types.StringValue(account.Cur.ExportName),
-			Type: types.StringValue(account.Cur.Type),
+			Type:       types.StringValue(account.Cur.Type),
 		}
 	}
-	if account.Athena != nil{
+	if account.Athena != nil {
 		model.Athena = &athenaModel{
-			AthenaDB: types.StringValue(account.Athena.AthenaDB),
+			AthenaDB:       types.StringValue(account.Athena.AthenaDB),
 			AthenaS3Bucket: types.StringValue(account.Athena.AthenaS3Bucket),
 		}
 	}

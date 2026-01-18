@@ -175,7 +175,6 @@ func (r *AccountResource) Create(ctx context.Context, req resource.CreateRequest
 		RoleARN:       plan.Account.RoleARN.ValueString(),
 		ExternalID:    plan.Account.ExternalID.ValueString(),
 		Products:      map[models.Product]models.ProductDetails{},
-
 	}
 	for _, product := range plan.Account.Products {
 		payload.Products[models.Product(product.Name.ValueString())] = models.ProductDetails{
@@ -185,16 +184,16 @@ func (r *AccountResource) Create(ctx context.Context, req resource.CreateRequest
 
 	if plan.Account.Cur != nil {
 		payload.Cur = &models.CurDetails{
-			S3Bucket: plan.Account.Cur.S3Bucket.ValueString(),
+			S3Bucket:   plan.Account.Cur.S3Bucket.ValueString(),
 			ExportName: plan.Account.Cur.ExportName.ValueString(),
-			Type: plan.Account.Cur.Type.ValueString(),
+			Type:       plan.Account.Cur.Type.ValueString(),
 		}
 	}
 
 	if plan.Account.Athena != nil {
 		payload.Athena = &models.AthenaDetails{
-			AthenaDB: plan.Account.Athena.AthenaDB.ValueString(),
-				AthenaS3Bucket: plan.Account.Athena.AthenaS3Bucket.ValueString(),
+			AthenaDB:       plan.Account.Athena.AthenaDB.ValueString(),
+			AthenaS3Bucket: plan.Account.Athena.AthenaS3Bucket.ValueString(),
 		}
 	}
 

@@ -25,13 +25,13 @@ type ProductDetails struct {
 }
 
 type CurDetails struct {
-	S3Bucket string `json:"s3Bucket"`
+	S3Bucket   string `json:"s3Bucket"`
 	ExportName string `json:"exportName"`
-	Type string `json:"type"`
+	Type       string `json:"type"`
 }
 
 type AthenaDetails struct {
-	AthenaDB string `json:"athenaDB"`
+	AthenaDB       string `json:"athenaDB"`
 	AthenaS3Bucket string `json:"athenaS3Bucket"`
 }
 
@@ -53,8 +53,8 @@ type Account struct {
 	Region           *string
 	CloudProvider    CloudProvider
 	Products         map[Product]ProductDetails
-	Cur 			 *CurDetails
-	Athena			 *AthenaDetails
+	Cur              *CurDetails
+	Athena           *AthenaDetails
 
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
