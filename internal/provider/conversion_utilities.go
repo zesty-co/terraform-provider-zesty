@@ -96,6 +96,11 @@ func ToModel(account *models.Account) (*accountModel, diag.Diagnostics) {
 		model.Athena = &athenaModel{
 			AthenaDB:       types.StringValue(account.Athena.AthenaDB),
 			AthenaS3Bucket: types.StringValue(account.Athena.AthenaS3Bucket),
+			AthenaProjectID: types.StringValue(account.Athena.AthenaProjectID),
+			AthenaRegion: types.StringValue(account.Athena.AthenaRegion),
+			AthenaTable: types.StringValue(account.Athena.AthenaTable),
+			AthenaWorkgroup: types.StringValue(account.Athena.AthenaWorkgroup),
+			AthenaCatalog: types.StringValue(account.Athena.AthenaCatalog),
 		}
 	}
 

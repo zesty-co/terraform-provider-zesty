@@ -133,6 +133,26 @@ func (r *AccountResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 								Description: "The s3 bucket for athena's results",
 								Required:    true,
 							},
+							"athena_project_id": schema.StringAttribute{
+								Description: "Athen's project id",
+								Required:    true,
+							},
+							"athena_region": schema.StringAttribute{
+								Description: "The athena instance's region",
+								Required:    true,
+							},
+							"athena_table": schema.StringAttribute{
+								Description: "The athena DB table.",
+								Required:    true,
+							},
+							"athena_workgroup": schema.StringAttribute{
+								Description: "The athena workgroup",
+								Required:    true,
+							},
+							"athena_catalog": schema.StringAttribute{
+								Description: "The athena catalog",
+								Required:    true,
+							},
 						},
 					},
 				},
@@ -194,6 +214,11 @@ func (r *AccountResource) Create(ctx context.Context, req resource.CreateRequest
 		payload.Athena = &models.AthenaDetails{
 			AthenaDB:       plan.Account.Athena.AthenaDB.ValueString(),
 			AthenaS3Bucket: plan.Account.Athena.AthenaS3Bucket.ValueString(),
+			AthenaProjectID: plan.Account.Athena.AthenaProjectID.ValueString(),
+			AthenaRegion: plan.Account.Athena.AthenaRegion.ValueString(),
+			AthenaTable: plan.Account.Athena.AthenaTable.ValueString(),
+			AthenaWorkgroup: plan.Account.Athena.AthenaWorkgroup.ValueString(),
+			AthenaCatalog: plan.Account.Athena.AthenaCatalog.ValueString(),
 		}
 	}
 

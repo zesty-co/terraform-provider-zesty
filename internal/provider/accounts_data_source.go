@@ -60,6 +60,11 @@ type curModel struct {
 type athenaModel struct {
 	AthenaDB       types.String `tfsdk:"athena_db"`
 	AthenaS3Bucket types.String `tfsdk:"athena_s3_bucket"`
+	AthenaProjectID types.String `tfsdk:"athena_project_id"`
+	AthenaRegion types.String `tfsdk:"athena_region"`
+	AthenaTable types.String `tfsdk:"athena_table"`
+	AthenaWorkgroup types.String `tfsdk:"athena_workgroup"`
+	AthenaCatalog types.String `tfsdk:"athena_catalog"`
 }
 
 // Schema defines the schema for the data source.
