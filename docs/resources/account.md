@@ -75,8 +75,13 @@ Read-Only:
 
 Required:
 
+- `athena_catalog` (String) The athena catalog
 - `athena_db` (String) The athena db associated with the cur report
+- `athena_project_id` (String) Athen's project id
+- `athena_region` (String) The athena instance's region
 - `athena_s3_bucket` (String) The s3 bucket for athena's results
+- `athena_table` (String) The athena DB table.
+- `athena_workgroup` (String) The athena workgroup
 
 
 <a id="nestedatt--account--cur"></a>

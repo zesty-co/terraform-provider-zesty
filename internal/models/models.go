@@ -31,13 +31,13 @@ type CurDetails struct {
 }
 
 type AthenaDetails struct {
-	AthenaDB       string `json:"athenaDB"`
-	AthenaS3Bucket string `json:"athenaS3Bucket"`
+	AthenaDB        string `json:"athenaDB"`
+	AthenaS3Bucket  string `json:"athenaS3Bucket"`
 	AthenaProjectID string `json:"athenaProjectID"`
-	AthenaRegion string `json:"athenaRegion"`
-	AthenaTable string `json:"athenaTable"`
+	AthenaRegion    string `json:"athenaRegion"`
+	AthenaTable     string `json:"athenaTable"`
 	AthenaWorkgroup string `json:"athenaWorkgroup"`
-	AthenaCatalog string `json:"athenaCatalog"`
+	AthenaCatalog   string `json:"athenaCatalog"`
 }
 
 type Payload struct {
