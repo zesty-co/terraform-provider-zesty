@@ -35,18 +35,37 @@ type accountsDataSourceModel struct {
 }
 
 type accountModel struct {
-	ID            types.String   `tfsdk:"id"`
-	CloudProvider types.String   `tfsdk:"cloud_provider"`
-	Region        types.String   `tfsdk:"region"`
-	RoleARN       types.String   `tfsdk:"role_arn"`
-	ExternalID    types.String   `tfsdk:"external_id"`
-	Products      []productModel `tfsdk:"products"`
+	ID               types.String   `tfsdk:"id"`
+	CloudProvider    types.String   `tfsdk:"cloud_provider"`
+	Region           types.String   `tfsdk:"region"`
+	RoleARN          types.String   `tfsdk:"role_arn"`
+	ExternalID       types.String   `tfsdk:"external_id"`
+	StorageClassName types.String   `tfsdk:"storage_class_name"`
+	Products         []productModel `tfsdk:"products"`
+	Cur              *curModel      `tfsdk:"cur"`
+	Athena           *athenaModel   `tfsdk:"athena"`
 }
 
 type productModel struct {
 	Name   types.String `tfsdk:"name"`
 	Active types.Bool   `tfsdk:"active"`
 	Values types.String `tfsdk:"values"`
+}
+
+type curModel struct {
+	S3Bucket   types.String `tfsdk:"s3_bucket"`
+	ExportName types.String `tfsdk:"cur_export_name"`
+	Type       types.String `tfsdk:"cur_type"`
+}
+
+type athenaModel struct {
+	AthenaDB        types.String `tfsdk:"athena_db"`
+	AthenaS3Bucket  types.String `tfsdk:"athena_s3_bucket"`
+	AthenaProjectID types.String `tfsdk:"athena_project_id"`
+	AthenaRegion    types.String `tfsdk:"athena_region"`
+	AthenaTable     types.String `tfsdk:"athena_table"`
+	AthenaWorkgroup types.String `tfsdk:"athena_workgroup"`
+	AthenaCatalog   types.String `tfsdk:"athena_catalog"`
 }
 
 // Schema defines the schema for the data source.
@@ -96,6 +115,58 @@ func (d *AccountsDataSource) Schema(_ context.Context, _ datasource.SchemaReques
 										Description: "Key-value pairs of product-specific values",
 										Computed:    true,
 									},
+								},
+							},
+						},
+						"cur": schema.SingleNestedAttribute{
+							Description: "Cur export data for the account",
+							Optional:    true,
+							Attributes: map[string]schema.Attribute{
+								"s3_bucket": schema.StringAttribute{
+									Description: "S3 bucket name for the cur export",
+									Required:    true,
+								},
+								"cur_export_name": schema.StringAttribute{
+									Description: "The cur export file name",
+									Required:    true,
+								},
+								"cur_type": schema.StringAttribute{
+									Optional: true,
+									Computed: true,
+								},
+							},
+						},
+						"athena": schema.SingleNestedAttribute{
+							Description: "Athena resources data for the account",
+							Optional:    true,
+							Attributes: map[string]schema.Attribute{
+								"athena_db": schema.StringAttribute{
+									Description: "The athena db associated with the cur report",
+									Required:    true,
+								},
+								"athena_s3_bucket": schema.StringAttribute{
+									Description: "The s3 bucket for athena's results",
+									Required:    true,
+								},
+								"athena_project_id": schema.StringAttribute{
+									Description: "Athen's project id",
+									Required:    true,
+								},
+								"athena_region": schema.StringAttribute{
+									Description: "The athena instance's region",
+									Required:    true,
+								},
+								"athena_table": schema.StringAttribute{
+									Description: "The athena DB table.",
+									Required:    true,
+								},
+								"athena_workgroup": schema.StringAttribute{
+									Description: "The athena workgroup",
+									Required:    true,
+								},
+								"athena_catalog": schema.StringAttribute{
+									Description: "The athena catalog",
+									Required:    true,
 								},
 							},
 						},

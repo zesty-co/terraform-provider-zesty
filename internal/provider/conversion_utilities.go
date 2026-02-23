@@ -63,11 +63,12 @@ func ToModel(account *models.Account) (*accountModel, diag.Diagnostics) {
 	}
 
 	model := accountModel{
-		ID:            types.StringValue(account.AccountID),
-		Region:        types.StringPointerValue(account.Region),
-		CloudProvider: types.StringValue(string(account.CloudProvider)),
-		RoleARN:       types.StringValue(roleARNString),
-		ExternalID:    types.StringValue(externalIDString),
+		ID:               types.StringValue(account.AccountID),
+		Region:           types.StringPointerValue(account.Region),
+		CloudProvider:    types.StringValue(string(account.CloudProvider)),
+		RoleARN:          types.StringValue(roleARNString),
+		ExternalID:       types.StringValue(externalIDString),
+		StorageClassName: types.StringValue(account.StorageClassName),
 	}
 
 	var productNames []string
@@ -84,6 +85,24 @@ func ToModel(account *models.Account) (*accountModel, diag.Diagnostics) {
 			Active: types.BoolValue(details.Active),
 			Values: types.StringValue(string(valuesBytes)),
 		})
+	}
+	if account.Cur != nil {
+		model.Cur = &curModel{
+			S3Bucket:   types.StringValue(account.Cur.S3Bucket),
+			ExportName: types.StringValue(account.Cur.ExportName),
+			Type:       types.StringValue(account.Cur.Type),
+		}
+	}
+	if account.Athena != nil {
+		model.Athena = &athenaModel{
+			AthenaDB:        types.StringValue(account.Athena.AthenaDB),
+			AthenaS3Bucket:  types.StringValue(account.Athena.AthenaS3Bucket),
+			AthenaProjectID: types.StringValue(account.Athena.AthenaProjectID),
+			AthenaRegion:    types.StringValue(account.Athena.AthenaRegion),
+			AthenaTable:     types.StringValue(account.Athena.AthenaTable),
+			AthenaWorkgroup: types.StringValue(account.Athena.AthenaWorkgroup),
+			AthenaCatalog:   types.StringValue(account.Athena.AthenaCatalog),
+		}
 	}
 
 	return &model, nil

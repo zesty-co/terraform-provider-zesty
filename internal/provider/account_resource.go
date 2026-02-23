@@ -82,6 +82,12 @@ func (r *AccountResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 						Default:     stringdefault.StaticString("us-east-1"),
 						Computed:    true,
 					},
+					"storage_class_name": schema.StringAttribute{
+						Description: "Storage class name of the cluster",
+						Optional:    true,
+						Default:     stringdefault.StaticString("ebs-sc"),
+						Computed:    true,
+					},
 					"products": schema.ListNestedAttribute{
 						Description: "List of products activated on the account",
 						Required:    true,
@@ -99,6 +105,59 @@ func (r *AccountResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 									Description: "Key-value pairs of product-specific values",
 									Computed:    true,
 								},
+							},
+						},
+					},
+					"cur": schema.SingleNestedAttribute{
+						Description: "Cur export data for the account",
+						Optional:    true,
+						Attributes: map[string]schema.Attribute{
+							"s3_bucket": schema.StringAttribute{
+								Description: "S3 bucket name for the cur export",
+								Required:    true,
+							},
+							"cur_export_name": schema.StringAttribute{
+								Description: "The cur export file name",
+								Required:    true,
+							},
+							"cur_type": schema.StringAttribute{
+								Optional: true,
+								Computed: true,
+								Default:  stringdefault.StaticString("cur_v2"),
+							},
+						},
+					},
+					"athena": schema.SingleNestedAttribute{
+						Description: "Athena resources data for the account",
+						Optional:    true,
+						Attributes: map[string]schema.Attribute{
+							"athena_db": schema.StringAttribute{
+								Description: "The athena db associated with the cur report",
+								Required:    true,
+							},
+							"athena_s3_bucket": schema.StringAttribute{
+								Description: "The s3 bucket for athena's results",
+								Required:    true,
+							},
+							"athena_project_id": schema.StringAttribute{
+								Description: "Athen's project id",
+								Required:    true,
+							},
+							"athena_region": schema.StringAttribute{
+								Description: "The athena instance's region",
+								Required:    true,
+							},
+							"athena_table": schema.StringAttribute{
+								Description: "The athena DB table.",
+								Required:    true,
+							},
+							"athena_workgroup": schema.StringAttribute{
+								Description: "The athena workgroup",
+								Required:    true,
+							},
+							"athena_catalog": schema.StringAttribute{
+								Description: "The athena catalog",
+								Required:    true,
 							},
 						},
 					},
@@ -136,18 +195,40 @@ func (r *AccountResource) Create(ctx context.Context, req resource.CreateRequest
 	}
 
 	payload := models.Payload{
-		AccountID:     plan.Account.ID.ValueString(),
-		Region:        plan.Account.Region.ValueStringPointer(),
-		CloudProvider: models.CloudProvider(plan.Account.CloudProvider.ValueString()),
-		RoleARN:       plan.Account.RoleARN.ValueString(),
-		ExternalID:    plan.Account.ExternalID.ValueString(),
-		Products:      map[models.Product]models.ProductDetails{},
+		AccountID:        plan.Account.ID.ValueString(),
+		Region:           plan.Account.Region.ValueStringPointer(),
+		CloudProvider:    models.CloudProvider(plan.Account.CloudProvider.ValueString()),
+		RoleARN:          plan.Account.RoleARN.ValueString(),
+		ExternalID:       plan.Account.ExternalID.ValueString(),
+		Products:         map[models.Product]models.ProductDetails{},
+		StorageClassName: plan.Account.StorageClassName.ValueString(),
 	}
 	for _, product := range plan.Account.Products {
 		payload.Products[models.Product(product.Name.ValueString())] = models.ProductDetails{
 			Active: product.Active.ValueBool(),
 		}
 	}
+
+	if plan.Account.Cur != nil {
+		payload.Cur = &models.CurDetails{
+			S3Bucket:   plan.Account.Cur.S3Bucket.ValueString(),
+			ExportName: plan.Account.Cur.ExportName.ValueString(),
+			Type:       plan.Account.Cur.Type.ValueString(),
+		}
+	}
+
+	if plan.Account.Athena != nil {
+		payload.Athena = &models.AthenaDetails{
+			AthenaDB:        plan.Account.Athena.AthenaDB.ValueString(),
+			AthenaS3Bucket:  plan.Account.Athena.AthenaS3Bucket.ValueString(),
+			AthenaProjectID: plan.Account.Athena.AthenaProjectID.ValueString(),
+			AthenaRegion:    plan.Account.Athena.AthenaRegion.ValueString(),
+			AthenaTable:     plan.Account.Athena.AthenaTable.ValueString(),
+			AthenaWorkgroup: plan.Account.Athena.AthenaWorkgroup.ValueString(),
+			AthenaCatalog:   plan.Account.Athena.AthenaCatalog.ValueString(),
+		}
+	}
+
 	tflog.Info(ctx, "Sending create request", map[string]any{"payload": payload})
 	account, err := r.client.CreateAccount(payload)
 	if err != nil {
@@ -219,16 +300,32 @@ func (r *AccountResource) Update(ctx context.Context, req resource.UpdateRequest
 	}
 
 	payload := models.Payload{
-		AccountID:     plan.Account.ID.ValueString(),
-		Region:        plan.Account.Region.ValueStringPointer(),
-		CloudProvider: models.CloudProvider(plan.Account.CloudProvider.ValueString()),
-		RoleARN:       plan.Account.RoleARN.ValueString(),
-		ExternalID:    plan.Account.ExternalID.ValueString(),
-		Products:      map[models.Product]models.ProductDetails{},
+		AccountID:        plan.Account.ID.ValueString(),
+		Region:           plan.Account.Region.ValueStringPointer(),
+		CloudProvider:    models.CloudProvider(plan.Account.CloudProvider.ValueString()),
+		RoleARN:          plan.Account.RoleARN.ValueString(),
+		ExternalID:       plan.Account.ExternalID.ValueString(),
+		Products:         map[models.Product]models.ProductDetails{},
+		StorageClassName: plan.Account.StorageClassName.ValueString(),
 	}
 	for _, product := range plan.Account.Products {
 		payload.Products[models.Product(product.Name.ValueString())] = models.ProductDetails{
 			Active: product.Active.ValueBool(),
+		}
+	}
+
+	if plan.Account.Cur != nil {
+		payload.Cur = &models.CurDetails{
+			S3Bucket:   plan.Account.Cur.S3Bucket.ValueString(),
+			ExportName: plan.Account.Cur.ExportName.ValueString(),
+			Type:       plan.Account.Cur.Type.ValueString(),
+		}
+	}
+
+	if plan.Account.Athena != nil {
+		payload.Athena = &models.AthenaDetails{
+			AthenaDB:       plan.Account.Athena.AthenaDB.ValueString(),
+			AthenaS3Bucket: plan.Account.Athena.AthenaS3Bucket.ValueString(),
 		}
 	}
 
