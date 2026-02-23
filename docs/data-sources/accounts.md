@@ -29,6 +29,8 @@ data "zesty_accounts" "all" {}
 
 Optional:
 
+- `athena` (Attributes) Athena resources data for the account (see [below for nested schema](#nestedatt--accounts--athena))
+- `cur` (Attributes) Cur export data for the account (see [below for nested schema](#nestedatt--accounts--cur))
 - `region` (String)
 
 Read-Only:
@@ -38,6 +40,33 @@ Read-Only:
 - `id` (String) Account ID
 - `products` (Attributes List) List of products activated on the account (see [below for nested schema](#nestedatt--accounts--products))
 - `role_arn` (String) Role ARN generated on the cloud provider
+
+<a id="nestedatt--accounts--athena"></a>
+### Nested Schema for `accounts.athena`
+
+Required:
+
+- `athena_catalog` (String) The athena catalog
+- `athena_db` (String) The athena db associated with the cur report
+- `athena_project_id` (String) Athen's project id
+- `athena_region` (String) The athena instance's region
+- `athena_s3_bucket` (String) The s3 bucket for athena's results
+- `athena_table` (String) The athena DB table.
+- `athena_workgroup` (String) The athena workgroup
+
+
+<a id="nestedatt--accounts--cur"></a>
+### Nested Schema for `accounts.cur`
+
+Required:
+
+- `cur_export_name` (String) The cur export file name
+- `s3_bucket` (String) S3 bucket name for the cur export
+
+Optional:
+
+- `cur_type` (String)
+
 
 <a id="nestedatt--accounts--products"></a>
 ### Nested Schema for `accounts.products`
