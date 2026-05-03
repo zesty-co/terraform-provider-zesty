@@ -324,8 +324,13 @@ func (r *AccountResource) Update(ctx context.Context, req resource.UpdateRequest
 
 	if plan.Account.Athena != nil {
 		payload.Athena = &models.AthenaDetails{
-			AthenaDB:       plan.Account.Athena.AthenaDB.ValueString(),
-			AthenaS3Bucket: plan.Account.Athena.AthenaS3Bucket.ValueString(),
+			AthenaDB:        plan.Account.Athena.AthenaDB.ValueString(),
+			AthenaS3Bucket:  plan.Account.Athena.AthenaS3Bucket.ValueString(),
+			AthenaProjectID: plan.Account.Athena.AthenaProjectID.ValueString(),
+			AthenaRegion:    plan.Account.Athena.AthenaRegion.ValueString(),
+			AthenaTable:     plan.Account.Athena.AthenaTable.ValueString(),
+			AthenaWorkgroup: plan.Account.Athena.AthenaWorkgroup.ValueString(),
+			AthenaCatalog:   plan.Account.Athena.AthenaCatalog.ValueString(),
 		}
 	}
 
