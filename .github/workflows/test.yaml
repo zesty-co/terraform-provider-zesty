@@ -43,6 +43,9 @@ jobs:
           cache: true
         id: go
 
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+
       - name: Make tools
         run: make tools
 
