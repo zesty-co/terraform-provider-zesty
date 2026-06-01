@@ -53,7 +53,7 @@ func TestNewClient(t *testing.T) {
 				assert.Equal(t, tt.expectedURL, c.HostURL)
 				assert.Equal(t, tt.token, c.Token)
 				assert.NotNil(t, c.HTTPClient)
-				assert.Equal(t, 60*time.Second, c.HTTPClient.Timeout)
+				assert.Equal(t, 180*time.Second, c.HTTPClient.Timeout)
 			}
 		})
 	}
